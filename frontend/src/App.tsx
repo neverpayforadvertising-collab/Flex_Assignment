@@ -73,8 +73,10 @@ export const useSidebar = () => {
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      gcTime: 1000 * 60 * 60 * 24, // 24 hours
-      staleTime: 1000 * 60 * 5, // 5 minutes
+      // gcTime: 1000 * 60 * 60 * 24, // 24 hours
+      // staleTime: 1000 * 60 * 5, // 5 minutes
+      gcTime: 1000 * 60 * 60, // 1 hour
+      staleTime: 1000 * 60,   // 1 minute
       refetchOnWindowFocus: true,
       refetchOnMount: true,
       retry: 1,
@@ -120,14 +122,26 @@ function AppWrapper() {
           <AuthProvider>
             <AppProvider>
               <ToastProvider>
-                <PersistQueryClientProvider
+                {/* <PersistQueryClientProvider
                   client={queryClient}
                   persistOptions={{
                     persister,
                     maxAge: 1000 * 60 * 60 * 24,
                     buster: "",
                   }}
+                > */}
+
+                const userId = localStorage.getItem("userId"); // or from auth context
+
+                <PersistQueryClientProvider
+                  client={queryClient}
+                  persistOptions={{
+                    persister,
+                    maxAge: 1000 * 60 * 60 * 24,
+                    buster: userId || "anonymous",
+                  }}
                 >
+
                   <AppContent />
                   <GlobalToast />
                 </PersistQueryClientProvider>
