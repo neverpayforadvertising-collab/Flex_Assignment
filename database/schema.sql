@@ -15,7 +15,8 @@ CREATE TABLE properties (
     name TEXT NOT NULL,
     timezone TEXT NOT NULL DEFAULT 'UTC',
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    PRIMARY KEY (id, tenant_id)
+    -- PRIMARY KEY (id, tenant_id)
+    WHERE property_id = ? AND tenant_id = ?
 );
 
 -- Reservations Table
@@ -25,7 +26,8 @@ CREATE TABLE reservations (
     tenant_id TEXT REFERENCES tenants(id),
     check_in_date TIMESTAMP WITH TIME ZONE NOT NULL,
     check_out_date TIMESTAMP WITH TIME ZONE NOT NULL,
-    total_amount NUMERIC(10, 3) NOT NULL, -- storing as numeric with 3 decimals to allow sub-cent precision tracking
+    -- total_amount NUMERIC(10, 3) NOT NULL, -- storing as numeric with 3 decimals to allow sub-cent precision tracking
+    total_amount INTEGER -- cents
     currency TEXT DEFAULT 'USD',
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     FOREIGN KEY (property_id, tenant_id) REFERENCES properties(id, tenant_id)
